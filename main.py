@@ -6,8 +6,12 @@ SCREEN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("My First Game!")
 
 WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+
+BORDER = pygame.Rect(WIDTH/2 - 5, 0, 10, HEIGHT)
+
 FPS = 60
-VELOCITY = 5
+VELOCITY = 15
 SPACESHIP_WIDTH, SPACESHIP_HEIGHT = 55, 40
 
 YELLOW_SPACESHIP_IMAGE = pygame.image.load(
@@ -21,28 +25,29 @@ RED_SPACESHIP = pygame.transform.rotate(
 
 def draw_screen(red, yellow):
     SCREEN.fill(WHITE)
+    pygame.draw.rect(SCREEN, BLACK, BORDER)
     SCREEN.blit(YELLOW_SPACESHIP, (yellow.x, yellow.y))
     SCREEN.blit(RED_SPACESHIP, (red.x, red.y))
     pygame.display.update()
 
 def handle_yellow_movement(key_pressed, yellow):
-    if key_pressed[pygame.K_a]: # LEFT
+    if key_pressed[pygame.K_a] and yellow.x - VELOCITY > 0: # LEFT
         yellow.x -= VELOCITY
-    if key_pressed[pygame.K_d]: # RIGHT
+    if key_pressed[pygame.K_d] and yellow.x + VELOCITY + yellow.width < BORDER.x: # RIGHT
         yellow.x += VELOCITY
-    if key_pressed[pygame.K_s]: # DOWN
+    if key_pressed[pygame.K_s] and yellow.y + VELOCITY + yellow.height < HEIGHT - 15: # DOWN
         yellow.y += VELOCITY
-    if key_pressed[pygame.K_w]: # UP
+    if key_pressed[pygame.K_w] and yellow.y - VELOCITY > 0: # UP
         yellow.y -= VELOCITY
 
 def handle_red_movement(key_pressed, red):
-    if key_pressed[pygame.K_j]: # LEFT
+    if key_pressed[pygame.K_j] and red.x - VELOCITY > BORDER.x + BORDER.width: # LEFT
         red.x -= VELOCITY
-    if key_pressed[pygame.K_l]: # RIGHT  
+    if key_pressed[pygame.K_l] and red.x + VELOCITY + red.width - 15 < WIDTH: # RIGHT  
         red.x += VELOCITY
-    if key_pressed[pygame.K_k]: # DOWN
+    if key_pressed[pygame.K_k] and red.y + VELOCITY + red.height < HEIGHT - 15: # DOWN
         red.y += VELOCITY
-    if key_pressed[pygame.K_i]: # UP
+    if key_pressed[pygame.K_i] and red.y - VELOCITY > 0: # UP
         red.y -= VELOCITY
 
 def main():
